@@ -9,6 +9,7 @@ import TaxElss     from './pages/TaxElss.jsx'
 import SipPlanner  from './pages/SipPlanner.jsx'
 import Benchmark   from './pages/Benchmark.jsx'
 import AIAdvisor   from './pages/AIAdvisor.jsx'
+import ImportModal from './components/ImportModal.jsx'
 
 export const TABS = [
   { id: 'overview',   label: 'Overview',    icon: '📊' },
@@ -31,6 +32,15 @@ export default function App() {
   })
 
   const [showImport, setShowImport] = useState(false)
+  // handleImport — called by ImportModal once parsing succeeds
+  const handleImport = (enrichedHoldings, source) => {
+    setPortfolio({
+      holdings: enrichedHoldings,
+      isLoaded: true,
+      source,
+    })
+    setShowImport(false)
+  }
 
   const pageProps = { portfolio, setPortfolio, setActiveTab }
   const PAGE_MAP = {
@@ -64,26 +74,10 @@ export default function App() {
       </div>
 
       {showImport && (
-        <div
-          className="fixed inset-0 flex items-center justify-center"
-          style={{ background: 'rgba(0,0,0,0.7)', zIndex: 100, backdropFilter: 'blur(8px)' }}
-          onClick={() => setShowImport(false)}
-        >
-          <div className="glass-card p-8 text-center" style={{ width: 440 }} onClick={e => e.stopPropagation()}>
-            <p style={{ fontSize: 40 }}>📥</p>
-            <h2 className="mt-4 font-bold text-lg">Import Portfolio</h2>
-            <p style={{ color: 'var(--color-muted)', fontSize: 13, marginTop: 8 }}>
-              Import module coming in Phase 2.
-            </p>
-            <button
-              onClick={() => setShowImport(false)}
-              className="mt-6 px-6 py-2 rounded-btn text-sm font-semibold"
-              style={{ background: 'var(--grad-accent)', color: '#fff', border: 'none', cursor: 'pointer' }}
-            >
-              Close
-            </button>
-          </div>
-        </div>
+        <ImportModal
+          onClose={() => setShowImport(false)}
+          onImport={handleImport}
+        />
       )}
     </div>
   )
