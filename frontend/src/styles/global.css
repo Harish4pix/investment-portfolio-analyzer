@@ -1,0 +1,89 @@
+/* stylelint-disable at-rule-no-unknown */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* stylelint-enable at-rule-no-unknown */
+
+:root {
+  --color-bg:      #06080f;
+--color-border:  rgba(255,255,255,0.07);
+  --color-card:    #0f1628;
+  --color-accent:  #00c6ff;
+  --color-gold:    #ffd200;
+  --color-green:   #38ef7d;
+  --color-red:     #ef473a;
+  --color-purple:  #c084fc;
+  --color-muted:   #7a8faa;
+  --grad-accent:   linear-gradient(135deg, #00c6ff, #0072ff);
+  --grad-gold:     linear-gradient(135deg, #f7971e, #ffd200);
+  --grad-green:    linear-gradient(135deg, #11998e, #38ef7d);
+  --grad-red:      linear-gradient(135deg, #cb2d3e, #ef473a);
+  --grad-purple:   linear-gradient(135deg, #7f00ff, #e100ff);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--color-bg);
+  color: #f0f4ff;
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: rgba(255,255,255,0.12); border-radius: 100px; }
+
+.glass-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+}
+
+.grad-text-gold {
+  background: var(--grad-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeUp { animation: fadeUp 0.6s ease forwards; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+.animate-pulse-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+
+input[type='range'] {
+  -webkit-appearance: none;
+  width: 100%; height: 4px;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.08);
+  cursor: pointer;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 8px rgba(0,198,255,0.5);
+}
+.empty-card {
+  background: #0d1117;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 70px 24px;
+  text-align: center;
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+.empty-card:hover {
+  border-color: rgba(21, 101, 192, 0.4);
+  background: #10151d;
+  transform: translateY(-2px);
+}
+
