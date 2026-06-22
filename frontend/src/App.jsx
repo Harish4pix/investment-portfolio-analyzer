@@ -1,3 +1,5 @@
+import { useLivePrices } from './hooks/useLivePrices.js'
+import { enrichHoldings } from './utils/portfolioCalc.js'
 import { useState } from 'react'
 import Header from './components/layout/Header.jsx'
 import Navbar from './components/layout/Navbar.jsx'
@@ -33,13 +35,35 @@ export default function App() {
 
   const [showImport, setShowImport] = useState(false)
   // handleImport — called by ImportModal once parsing succeeds
-  const handleImport = (enrichedHoldings, source) => {
+  const { refresh: refreshPrices, loading: pricesLoading } = useLivePrices()
+
+  const handleImport = async (enrichedHoldings, source) => {
+    // Show the holdings immediately with CSV/manual prices first —
+    // don't make the user wait for the network call to see anything.
     setPortfolio({
       holdings: enrichedHoldings,
       isLoaded: true,
       source,
     })
     setShowImport(false)
+
+    // Then fetch live prices in the background and update once ready
+    const tickers = enrichedHoldings.map((h) => h.ticker)
+    const priceMap = await refreshPrices(tickers)
+
+    // Merge live prices into holdings, then re-run enrichment
+    // so invested/current/gain/ROI all reflect the NEW live price.
+    const updatedRaw = enrichedHoldings.map((h) => ({
+      ...h,
+      ltp: priceMap[h.ticker]?.ltp ?? h.ltp,   // fallback to old price if fetch failed
+    }))
+    const reEnriched = enrichHoldings(updatedRaw)
+
+    setPortfolio({
+      holdings: reEnriched,
+      isLoaded: true,
+      source,
+    })
   }
 
   const pageProps = { portfolio, setPortfolio, setActiveTab }

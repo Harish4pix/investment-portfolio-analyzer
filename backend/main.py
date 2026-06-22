@@ -50,6 +50,10 @@ app.add_middleware(
 # app.include_router(tax_router,       prefix="/tax",       tags=["Tax"])
 # app.include_router(risk_router,      prefix="/risk",      tags=["Risk"])
 
+from routers.prices import router as prices_router
+
+app.include_router(prices_router, prefix="/prices", tags=["Prices"])
+
 # ── Health Check ────────────────────────────────────────────────
 # Always have a health check endpoint.
 # Used to verify server is running.
